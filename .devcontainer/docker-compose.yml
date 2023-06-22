@@ -1,21 +1,20 @@
-version: '3.8'
+version: "3.8"
 
 services:
   app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
 
     volumes:
       - ../..:/workspaces:cached
-      
+
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
     network_mode: service:db
-
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   db:
@@ -27,9 +26,25 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
-
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    # (Adding the "ports" property to this file will not forward from a Codespace.
+
+  pgadmin:
+    container_name: pgadmin_container
+    build:
+      context: .
+      dockerfile: Dockerfile-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    restart: unless-stopped
+    #network_mode: service:db
+    ports:
+      - 80:80
 
 volumes:
   postgres-data:
+  pgadmin:
