@@ -1,8 +1,6 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
 
-console.log(process.env);
-
 export const connectionSource = new DataSource({
   migrationsTableName: 'migrations',
   type: 'postgres',
