@@ -5,5 +5,5 @@ services:
     image: "mcr.microsoft.com/devcontainers/typescript-node:1-18"
     volumes:
       - ../..:/workspaces:cached
-      - ../../.aws:/home/node/.aws:cached
+      - ../.aws:/home/node/.aws:cached
     command: sleep infinity
