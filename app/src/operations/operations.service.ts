@@ -3,11 +3,16 @@ import { Operation } from '../operations/operation.entity';
 import { Record } from '../users/record.entity';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
-import { Injectable } from '@nestjs/common';
+import { HttpServer, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { NotEnoughBalanceException } from './not-enough-balance.exception';
 import * as crypto from 'crypto';
+import { HttpService } from '@nestjs/axios';
+import { catchError, lastValueFrom, map } from 'rxjs';
+
+const randomStringUrl =
+  'https://www.random.org/strings/?num=1&len=8&digits=on&upperalpha=on&loweralpha=on&unique=off&format=plain&rnd=new';
 
 @Injectable()
 export class OperationsService {
@@ -17,6 +22,7 @@ export class OperationsService {
     private readonly operationRepository: Repository<Operation>,
     private readonly userService: UsersService,
     private readonly datasource: DataSource,
+    private readonly httpService: HttpService,
   ) {}
 
   async findByType(operationType: OperationType): Promise<Operation> {
@@ -98,7 +104,9 @@ export class OperationsService {
 
   async performRandomString(userId: string): Promise<string> {
     return this.perform(OperationType.random_string, userId, () =>
-      Promise.resolve('x'),
+      lastValueFrom(
+        this.httpService.get(randomStringUrl).pipe(map((value) => value.data)),
+      ),
     );
   }
 }
