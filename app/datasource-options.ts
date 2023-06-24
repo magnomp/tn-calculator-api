@@ -2,8 +2,6 @@ import * as path from 'path';
 import { DataSourceOptions } from 'typeorm';
 import 'dotenv/config';
 
-console.log(process.env);
-
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
