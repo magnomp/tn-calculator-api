@@ -7,10 +7,12 @@ import { OperationsService } from './operations.service';
 import { OperationsController } from './operations.controller';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     UsersModule,
+    HttpModule,
     TypeOrmModule.forFeature([User, Operation]),
     AuthModule,
     JwtModule,
