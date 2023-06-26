@@ -92,7 +92,7 @@ export class OperationsService {
     b: number,
   ): Promise<number> {
     return this.perform(OperationType.multiplication, userId, () =>
-      Promise.resolve(a + b),
+      Promise.resolve(a * b),
     );
   }
 

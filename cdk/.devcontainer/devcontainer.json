@@ -3,7 +3,7 @@
 {
 	"name": "TN Calc Api - CDK",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
+	"service": "tncalc_api_devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		"ghcr.io/devcontainers/features/aws-cli:1": {
@@ -18,6 +18,13 @@
 		},
 		"ghcr.io/devcontainers-contrib/features/aws-cdk:2": {
 			"version": "latest"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"esbenp.prettier-vscode"
+			]
 		}
 	}
 

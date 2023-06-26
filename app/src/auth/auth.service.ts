@@ -36,6 +36,7 @@ export class AuthService {
     const payload = {
       sub: user.userId,
       sid: session.sessionId,
+      email: user.userName,
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
@@ -46,6 +47,7 @@ export class AuthService {
   async refresh(refreshToken: string): Promise<TokensDto> {
     const session = await this.sessionRepository
       .createQueryBuilder('session')
+      .leftJoinAndSelect('session.user', 'user')
       .andWhere('session.refreshToken = :refreshToken', { refreshToken })
       .getOne();
 
@@ -56,6 +58,7 @@ export class AuthService {
     const payload = {
       sub: session.userId,
       sid: session.sessionId,
+      email: session.user.userName,
     };
 
     const accessToken = await this.jwtService.signAsync(payload);

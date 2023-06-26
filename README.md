@@ -41,6 +41,7 @@ Now you must provide AWS credentials, to do so create a "credentials" file insid
 If you just want to experiment the app and deployment process, I recommend a user with AdministratorAccess policy.
 
 Next, you must bootstrap CDK on your AWS account, this is as simple as:
+(Not necessary if you already bootstraped and deployed the frontend project on this account)
 > cdk bootstrap
 
 This is a one time step, even if you recreate the container
@@ -51,16 +52,16 @@ And finally, you deploy the application with:
 On both deploy and bootstrap you will be prompted to confirm creation of some resources on your AWS account, which you should answer yes.
 
 The deploy operation will take some minutes to complete, but in the end you`re expected to see something like:
-CdkStack
-
-Deployment time: 331.74s
-
-Outputs:
-CdkStack.apiurl = 5mmuxz9hcp.us-east-2.awsapprunner.com
-Stack ARN:
-arn:aws:cloudformation:us-east-2:122195075444:stack/CdkStack/7954eb60-120c-11ee-b403-0a38b43ebe9d
-
-Total time: 335.77s
+>tn-calc-api
+>
+>Deployment time: 331.74s
+>
+>Outputs:
+>tn-calc-api.apiurl = 5mmuxz9hcp.us-east-2.awsapprunner.com
+>Stack ARN:
+>arn:aws:cloudformation:us-east-2:122195075444:stack/CdkStack/7954eb60-120c-11ee-b403-0a38b43ebe9d
+>
+>Total time: 335.77s
 
 Now the app is deployed at http://5mmuxz9hcp.us-east-2.awsapprunner.com
 

@@ -16,6 +16,7 @@ import { Request } from 'express';
 import { RecordsRequestDto } from './dto/records-request.dto';
 import { RecordDto } from './dto/record.dto';
 import { RecordsService } from './records.service';
+import { RecordsPaginationResultDto } from './dto/records-pagination-result.dto';
 
 @Controller('records')
 export class RecordsController {
@@ -27,7 +28,7 @@ export class RecordsController {
   async listRecords(
     @Req() request: Request,
     @Query() dto: RecordsRequestDto,
-  ): Promise<RecordDto[]> {
+  ): Promise<RecordsPaginationResultDto> {
     return await this.recordsService.listRecords(request['userId'], dto);
   }
 

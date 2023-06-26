@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecordDto } from './dto/record.dto';
+import { RecordsPaginationResultDto } from './dto/records-pagination-result.dto';
 import { RecordsRequestDto } from './dto/records-request.dto';
 import { Record } from './record.entity';
 
@@ -28,8 +29,7 @@ export class RecordsService {
   async listRecords(
     userId: string,
     request: RecordsRequestDto,
-  ): Promise<RecordDto[]> {
-    console.log(request);
+  ): Promise<RecordsPaginationResultDto> {
     const qb = this.recordRepository
       .createQueryBuilder('record')
       .andWhere('record.isDeleted = false')
@@ -45,15 +45,20 @@ export class RecordsService {
       });
     }
 
+    const count = await qb.getCount();
+
     const records = await qb.getMany();
-    return records.map((r) => ({
-      recordId: r.recordId,
-      operationId: r.operationId,
-      operationType: r.operation.operationType,
-      userBalance: r.userBalance,
-      amount: r.amount,
-      response: r.operationResponse,
-      date: r.date.toISOString(),
-    }));
+    return {
+      total: count,
+      page: records.map((r) => ({
+        recordId: r.recordId,
+        operationId: r.operationId,
+        operationType: r.operation.operationType,
+        userBalance: r.userBalance,
+        amount: r.amount,
+        response: r.operationResponse,
+        date: r.date.toISOString(),
+      })),
+    };
   }
 }
