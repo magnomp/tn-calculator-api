@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { dataSourceOptions } from '../datasource-options';
 import { OperationsModule } from './operations/operations.module';
 import { UsersModule } from './users/users.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -19,5 +20,6 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     OperationsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

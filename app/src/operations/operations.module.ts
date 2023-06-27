@@ -8,6 +8,7 @@ import { OperationsController } from './operations.controller';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
+import { OperationsQuery } from './operations.query';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { HttpModule } from '@nestjs/axios';
     AuthModule,
     JwtModule,
   ],
-  providers: [OperationsService],
-  exports: [OperationsService],
+  providers: [OperationsService, OperationsQuery],
+  exports: [OperationsService, OperationsQuery],
   controllers: [OperationsController],
 })
 export class OperationsModule {}

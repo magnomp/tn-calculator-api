@@ -14,6 +14,8 @@ import { LoginRequestDto } from './dto/login-request.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
+import { InvalidCredentialsException } from './exception/invalid-credentials.exception';
+import { InvalidRefreshTokenException } from './exception/invalid-refresh-token.exception';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +27,6 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
     @Body() dto: LoginRequestDto,
   ): Promise<LoginResponseDto> {
-    console.log(dto);
     try {
       const tokens = await this.authService.signIn(dto.username, dto.password);
 
@@ -36,10 +37,9 @@ export class AuthController {
 
       return { accessToken: tokens.accessToken };
     } catch (e) {
-      if (e.type == 'invalid-credentials') {
+      if (e instanceof InvalidCredentialsException) {
         throw new HttpException('invalid-credentials', HttpStatus.UNAUTHORIZED);
       } else {
-        console.log(e);
         throw e;
       }
     }
@@ -63,7 +63,7 @@ export class AuthController {
 
       return { accessToken: tokens.accessToken };
     } catch (e) {
-      if (e.type == 'invalid-refresh-token') {
+      if (e instanceof InvalidRefreshTokenException) {
         throw new HttpException(
           'invalid-refresh-token',
           HttpStatus.UNAUTHORIZED,

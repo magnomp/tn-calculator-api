@@ -3,13 +3,14 @@ import { Operation } from '../operations/operation.entity';
 import { Record } from '../users/record.entity';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
-import { HttpServer, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { NotEnoughBalanceException } from './not-enough-balance.exception';
 import * as crypto from 'crypto';
 import { HttpService } from '@nestjs/axios';
-import { catchError, lastValueFrom, map } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
+import { OperationsQuery } from './operations.query';
 
 const randomStringUrl =
   'https://www.random.org/strings/?num=1&len=8&digits=on&upperalpha=on&loweralpha=on&unique=off&format=plain&rnd=new';
@@ -17,27 +18,20 @@ const randomStringUrl =
 @Injectable()
 export class OperationsService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(Operation)
     private readonly operationRepository: Repository<Operation>,
     private readonly userService: UsersService,
     private readonly datasource: DataSource,
     private readonly httpService: HttpService,
+    private readonly operationsQuery: OperationsQuery,
   ) {}
-
-  async findByType(operationType: OperationType): Promise<Operation> {
-    return await this.operationRepository
-      .createQueryBuilder('operation')
-      .andWhere('operation.operationType = :operationType', { operationType })
-      .getOne();
-  }
 
   private async perform<Type extends number | string>(
     operationType: OperationType,
     userId: string,
     handler: () => Promise<Type>,
   ): Promise<Type> {
-    const operation = await this.findByType(operationType);
+    const operation = await this.operationsQuery.findByType(operationType);
     const user = await this.userService.findById(userId);
 
     if (user.balance <= operation.cost)
