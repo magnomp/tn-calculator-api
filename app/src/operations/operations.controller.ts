@@ -15,9 +15,12 @@ import { TwoOperands } from './dto/two-operands.dto';
 import { DivisionOperands } from './dto/division-operands.dto';
 import { SqrtOperandDto } from './dto/sqrt-operand.dto';
 import { NotEnoughBalanceExceptionFilter } from './operations.exception-filters';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('operations')
 @UseFilters(NotEnoughBalanceExceptionFilter)
+@ApiBearerAuth()
+@ApiTags('operations')
 export class OperationsController {
   constructor(private readonly operationsService: OperationsService) {}
 

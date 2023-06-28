@@ -17,8 +17,11 @@ import { RecordsRequestDto } from './dto/records-request.dto';
 import { RecordDto } from './dto/record.dto';
 import { RecordsService } from './records.service';
 import { RecordsPaginationResultDto } from './dto/records-pagination-result.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('records')
+@ApiBearerAuth('Authentication')
+@ApiTags('user records')
 export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}
 

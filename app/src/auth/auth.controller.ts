@@ -16,8 +16,10 @@ import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import { InvalidCredentialsException } from './exception/invalid-credentials.exception';
 import { InvalidRefreshTokenException } from './exception/invalid-refresh-token.exception';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -76,6 +78,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Post('logout')
   async logout(
     @Req() request: Request,
