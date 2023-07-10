@@ -18,6 +18,7 @@ In order to work on either "app" or in "cdk" you must fulfill these pre-requisit
 - VSCode
 - Docker / Docker Compose
 - Extension Dev Containers installed on VSCode
+- Ports 3000 and 80 available
 
 Now, in order to open "app" or "cdk", just open the correspondent folder on VSCode. You`ll be prompted to reopen the IDE on a container, which you must answer Yes.
 
@@ -31,6 +32,8 @@ Open "app" folder on VSCode, then on integrated terminal just run:
 
 And this is it, the API is running on http://localhost:3000
 
+There´s an admin interface for the local database available at http://localhost
+
 ### Running on AWS
 
 Although it wasn`t a requirement, I made it easy to deploy on AWS. To do so, open the "cdk" folder on VSCode.
@@ -41,7 +44,9 @@ Unfortunatelly, before we can deploy we have to deal with a little bug (not mine
 
 This step must be done just one time (unless you recreate the dev container)
 
-Now you must provide AWS credentials, to do so create a "credentials" file inside .aws folder (I assume you`re on CDK dev container), you can use credentials.sample as a base. The credentials you use must have enough permissions to manage S3, RDS, App Runner, CloudWatch, CloudFormation, etc.
+Now you must provide AWS credentials, which can be done via aws-cli using the configure command. The credentials you use must have enough permissions to manage S3, RDS, App Runner, CloudWatch, CloudFormation, etc.
+
+> aws configure
 
 If you just want to experiment the app and deployment process, I recommend a user with AdministratorAccess policy.
 
