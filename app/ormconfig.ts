@@ -1,4 +1,3 @@
-import { dataSourceOptions } from './datasource-options';
-import { DataSource } from 'typeorm';
+import { useDatasource } from '@/data-source';
 
-export const connectionSource = new DataSource(dataSourceOptions);
+export const connectionSource = useDatasource(process.env.POSTGRES_DB, false);

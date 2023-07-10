@@ -26,25 +26,19 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: tncalc
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.
-
-  pgadmin:
-    build:
-      context: .
-      dockerfile: Dockerfile-pgadmin
+  adminer:
+    image: michalhosna/adminer
+    network_mode: service:db
     environment:
-      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.com
-      PGADMIN_DEFAULT_PASSWORD: pgadmin
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    restart: unless-stopped
-    #network_mode: service:db
-    ports:
-      - 80:80
+      ADMINER_DB: tncalc
+      ADMINER_DRIVER: pgsql
+      ADMINER_PASSWORD: postgres
+      ADMINER_SERVER: db
+      ADMINER_USERNAME: postgres
+      ADMINER_AUTOLOGIN: 1
 
 volumes:
   postgres-data:
-  pgadmin:

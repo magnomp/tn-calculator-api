@@ -2,11 +2,11 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { dataSourceOptions } from '../datasource-options';
-import { OperationsModule } from './operations/operations.module';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './modules/auth/infra/auth.module';
+import { OperationsModule } from './modules/operations/infra/operations.module';
+import { UsersModule } from './modules/user/infra/users.module';
 import { AppController } from './app.controller';
+import { useDatasourceOptions } from './data-source';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { AppController } from './app.controller';
       timeout: 5000,
       maxRedirects: 5,
     }),
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRoot(useDatasourceOptions(process.env.POSTGRES_DB, false)),
     UsersModule,
     AuthModule,
     OperationsModule,
