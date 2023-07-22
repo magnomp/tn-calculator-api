@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { RecordsRequestDto } from './requests/records-request.dto';
+import { RecordsRequestDto } from './dto/records-request.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteRecordUsecase } from '../../application/usecases/delete-record.usecase';
 import {

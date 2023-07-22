@@ -14,7 +14,9 @@ import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOkResponse,
+  ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -79,6 +81,10 @@ export class AuthController {
       'Refresh token is either invalid, revoked or belongs to an already closed session',
   })
   @Post('refresh')
+  @ApiOperation({
+    description:
+      'Renew your access token. It uses the refresh token stored on "refreshtoken" cookie and sets a new one',
+  })
   async refresh(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
@@ -107,6 +113,9 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Post('logout')
+  @ApiOperation({
+    description: 'Finishes the current session',
+  })
   async logout(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
