@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   HttpCode,
+  HttpException,
   HttpStatus,
   Post,
   Req,
@@ -11,7 +12,12 @@ import {
 import { LoginResponse } from './responses/login-response';
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthenticateUsecase } from '../../application/usecases/authenticate.usecase';
 import { OrError } from '@/shared/or-error';
 import { LoginRequest } from './requests/login-request';
@@ -30,11 +36,14 @@ export class AuthController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: LoginResponse,
+  })
   @Post('login')
   async signIn(
     @Res({ passthrough: true }) response: Response,
     @Body() body: LoginRequest,
-  ): Promise<OrError<LoginResponse>> {
+  ): Promise<LoginResponse> {
     try {
       const tokens = await this.authenticateUsecase.execute(
         body.username,
@@ -49,8 +58,7 @@ export class AuthController {
       return { accessToken: tokens.accessToken };
     } catch (e) {
       if (e instanceof InvalidCredentialsException) {
-        response.status(HttpStatus.UNAUTHORIZED);
-        return { code: 'invalid-credentials' };
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       } else {
         throw e;
       }
