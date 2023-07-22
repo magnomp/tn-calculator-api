@@ -39,6 +39,10 @@ export class AuthController {
   @ApiOkResponse({
     type: LoginResponse,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Could not login with the given credentials',
+  })
   @Post('login')
   async signIn(
     @Res({ passthrough: true }) response: Response,
@@ -66,11 +70,19 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: LoginResponse,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description:
+      'Refresh token is either invalid, revoked or belongs to an already closed session',
+  })
   @Post('refresh')
   async refresh(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
-  ): Promise<OrError<LoginResponse>> {
+  ): Promise<LoginResponse> {
     try {
       const tokens = await this.refreshTokenUsecase.execute(
         request.cookies['refreshtoken'],
@@ -84,8 +96,7 @@ export class AuthController {
       return { accessToken: tokens.accessToken };
     } catch (e) {
       if (e instanceof InvalidRefreshTokenException) {
-        response.status(HttpStatus.UNAUTHORIZED);
-        return { code: 'invalid-refresh-token' };
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       } else {
         throw e;
       }
