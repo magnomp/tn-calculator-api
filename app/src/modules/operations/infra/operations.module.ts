@@ -52,7 +52,7 @@ import { Record } from './typeorm/entities/record.entity';
     },
     {
       provide: 'randomOrgEndpoint',
-      useValue: 'https://random.org',
+      useValue: process.env.RANDOM_ORG_ENDPOINT,
     },
   ],
   controllers: [OperationsController, RecordsController],
