@@ -12,7 +12,6 @@ describe('auth', () => {
   });
 
   it('Every operation must register a record on user history', async () => {
-    console.log(accessToken);
     for (let i = 1; i <= 3; ++i) {
       await axios.post(
         'operations/addition',

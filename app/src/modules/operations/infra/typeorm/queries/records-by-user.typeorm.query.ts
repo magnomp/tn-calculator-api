@@ -82,9 +82,6 @@ export class RecordsByUserQueryTypeOrm implements RecordsByUserQuery {
     const total = await qb.getCount();
     qb.limit(take).offset(skip);
 
-    console.log({ skip, take });
-    console.log(qb.getSql());
-
     return {
       total,
       items: await qb.getRawMany<Record>(),

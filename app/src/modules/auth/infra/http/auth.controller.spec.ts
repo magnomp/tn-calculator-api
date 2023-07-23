@@ -6,6 +6,7 @@ import { InvalidRefreshTokenException } from '@/modules/auth/application/types/i
 import { RefreshTokenUsecase } from '../../application/usecases/refresh-token.usecase';
 import { LogoutUsecase } from '../../application/usecases/logout.usecase';
 import { AuthenticateUsecase } from '../../application/usecases/authenticate.usecase';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -48,7 +49,9 @@ describe('AuthController', () => {
 
       await expect(
         controller.signIn(res, { username: 'foo', password: 'bar' }),
-      ).resolves.toStrictEqual({ code: 'invalid-credentials' });
+      ).rejects.toThrow(
+        new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED),
+      );
     });
   });
 
@@ -78,9 +81,9 @@ describe('AuthController', () => {
         .withArgs('rt')
         .rejects(new InvalidRefreshTokenException());
 
-      await expect(controller.refresh(req, res)).resolves.toStrictEqual({
-        code: 'invalid-refresh-token',
-      });
+      await expect(controller.refresh(req, res)).rejects.toThrow(
+        new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED),
+      );
     });
   });
 });
