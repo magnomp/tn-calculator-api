@@ -70,6 +70,7 @@ export class CdkStack extends cdk.Stack {
           port: 80,
           environmentVariables: {
             NO_COLOR: "true",
+            RANDOM_ORG_ENDPOINT: "https://random.org"
           },
           environmentSecrets: {
             POSTGRES_USER: apprunner.Secret.fromSecretsManager(
