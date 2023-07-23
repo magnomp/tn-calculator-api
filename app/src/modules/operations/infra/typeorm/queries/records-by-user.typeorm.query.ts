@@ -80,7 +80,10 @@ export class RecordsByUserQueryTypeOrm implements RecordsByUserQuery {
       `"record"."date" as "date"`,
     ]);
     const total = await qb.getCount();
-    qb.skip(skip).take(take);
+    qb.limit(take).offset(skip);
+
+    console.log({ skip, take });
+    console.log(qb.getSql());
 
     return {
       total,

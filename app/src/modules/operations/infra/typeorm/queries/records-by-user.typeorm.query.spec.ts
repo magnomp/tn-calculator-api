@@ -78,4 +78,31 @@ describe('RecordsByUserQueryTypeOrm', () => {
     expect(result.items[0].operationResult).toBe('1');
     expect(result.items[1].operationResult).toBe('3');
   });
+
+  describe('Pagination', () => {
+    it('Should return the requested object count', async () => {
+      const userId = crypto.randomUUID();
+      const operation = new Operation();
+      operation.operationId = '3a8e4217-f5fb-4770-98cf-6bd82ebffb83';
+      operation.operationType = OperationType.addition;
+      operation.cost = 10;
+      await datasource.getRepository(Operation).save(operation);
+
+      for (let i = 0; i < 11; i++) {
+        const record = new Record();
+        record.recordId = crypto.randomUUID();
+        record.userId = userId;
+        record.userBalance = 10;
+        record.amount = i == 10 ? 100 : 10;
+        record.date = new Date();
+        record.isDeleted = false;
+        record.operationId = '3a8e4217-f5fb-4770-98cf-6bd82ebffb83';
+        record.operationResponse = '100';
+        await typeOrmRepo.save(record);
+      }
+
+      const result = await query.execute(userId, 0, 2, { amount: 10 }, []);
+      expect(result.items.length).toBe(2);
+    });
+  });
 });

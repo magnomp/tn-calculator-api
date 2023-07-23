@@ -1,11 +1,11 @@
 import { AuthController } from './auth.controller';
 import * as mocks from 'node-mocks-http';
 import sinon from 'sinon';
-import { AuthenticateUsecase } from '@/modules/auth/application/usecases/authenticate-usecase';
 import { InvalidCredentialsException } from '@/modules/auth/application/types/invalid-credentials.exception';
 import { InvalidRefreshTokenException } from '@/modules/auth/application/types/invalid-refresh-token.exception';
 import { RefreshTokenUsecase } from '../../application/usecases/refresh-token.usecase';
 import { LogoutUsecase } from '../../application/usecases/logout.usecase';
+import { AuthenticateUsecase } from '../../application/usecases/authenticate.usecase';
 
 describe('AuthController', () => {
   let controller: AuthController;
